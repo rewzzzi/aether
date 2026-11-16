@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AETHER — Procedural Lo-Fi & Liquid Ambient Generator</title>
+    <meta name="description" content="Infinite procedural lo-fi ambient generator with real-time liquid glass visualizer and FM sound synthesis.">
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="css/style.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%239bc5ff'/></svg>">
+</head>
+<body>
+    <!-- Analog Grain Overlay -->
+    <div class="grain-overlay"></div>
+
+    <!-- Liquid Background Ambient Glows -->
+    <div class="fluid-ambient-lights">
+        <div class="ambient-light light-1"></div>
+        <div class="ambient-light light-2"></div>
+        <div class="ambient-light light-3"></div>
+    </div>
+
+    <!-- Application Shell -->
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="brand">
+                <h1 class="logo-text">AETHER</h1>
+                <span class="brand-badge">PROCEDURAL DSP</span>
+            </div>
+            <div class="header-meta">
+                <div class="glass-chip">
+                    <span class="live-indicator"></span>
+                    <span id="scale-display">D Dorian / Neo-Soul</span>
+                </div>
+                <div class="glass-chip">
+                    <span id="bpm-display">68 BPM</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Workspace Stage -->
+        <main class="main-stage">
+            <!-- Left Column: Fluid Reactor & Visualizer -->
+            <section class="glass-panel reactor-panel">
+                <div class="reactor-header">
+                    <span class="panel-title">Fluid Resonance Chamber</span>
+                    <div class="chord-monitor">
+                        <span class="chord-label">CURRENT CHORD</span>
+                        <span id="chord-display" class="chord-name">--</span>
+                    </div>
+                </div>
+
+                <!-- Canvas Visualizer -->
+                <div class="canvas-wrapper">
+                    <canvas id="liquid-canvas"></canvas>
+                </div>
+
+                <!-- Action Controls -->
+                <div class="reactor-actions">
+                    <button id="play-btn" class="liquid-btn-play" aria-label="Toggle Playback">
+                        <span id="play-icon">
+                            <polygon points="7,5 19,12 7,19" fill="currentColor"></polygon>
+                        </span>
+                        <span id="play-btn-text">BEGIN DRIFT</span>
+                    </button>
+
+                    <button id="randomize-btn" class="glass-btn-icon" title="Surprise Me / Random Texture" aria-label="Randomize Texture">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="16 3 21 3 21 8"></polyline>
+                            <line x1="4" y1="20" x2="21" y2="3"></line>
+                            <polyline points="21 16 21 21 16 21"></polyline>
+                            <line x1="15" y1="15" x2="21" y2="21"></line>
+                            <line x1="4" y1="4" x2="9" y2="9"></line>
+                        </svg>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Right Column: Sculpting Deck & Moods -->
+            <section class="glass-panel controls-panel">
+                <!-- Mood Presets -->
+                <div class="section-group">
+                    <div class="section-header">
+                        <span class="section-title">Harmonic Environment</span>
+                    </div>
+                    <div class="mood-selector">
+                        <button class="mood-pill active" data-mood="midnight">
+                            <strong>Midnight Velvet</strong>
+                            <span class="sub">Dorian / Neo-Soul</span>
+                        </button>
+                        <button class="mood-pill" data-mood="rainy">
+                            <strong>Rainy Daydream</strong>
+                            <span class="sub">Chillhop / Lydian</span>
+                        </button>
+                        <button class="mood-pill" data-mood="ethereal">
+                            <strong>Ethereal Drift</strong>
+                            <span class="sub">Floating Ambient</span>
+                        </button>
+                        <button class="mood-pill" data-mood="solar">
+                            <strong>Solar Haze</strong>
+                            <span class="sub">Warm Neo-Groove</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Sound Sculpting Sliders -->
+                <div class="section-group">
+                    <div class="section-header">
+                        <span class="section-title">Acoustic Sculpting</span>
+                    </div>
+                    <div class="sliders-deck">
+                        <!-- Warmth (Lowpass) -->
+                        <div class="slider-group">
+                            <div class="slider-meta">
+                                <span class="slider-name">Warmth Filter</span>
+                                <span id="val-warmth" class="slider-val">1200 Hz</span>
+                            </div>
+                            <input type="range" id="slider-warmth" min="400" max="3200" step="50" value="1200">
+                        </div>
+
+                        <!-- Tape Flutter -->
+                        <div class="slider-group">
+                            <div class="slider-meta">
+                                <span class="slider-name">Tape Flutter & Drift</span>
+                                <span id="val-flutter" class="slider-val">35%</span>
+                            </div>
+                            <input type="range" id="slider-flutter" min="0" max="1" step="0.01" value="0.35">
+                        </div>
+
+                        <!-- Vinyl Dust -->
+                        <div class="slider-group">
+                            <div class="slider-meta">
+                                <span class="slider-name">Vinyl Dust & Crackle</span>
+                                <span id="val-vinyl" class="slider-val">4%</span>
+                            </div>
+                            <input type="range" id="slider-vinyl" min="0" max="0.25" step="0.005" value="0.04">
+                        </div>
+
+                        <!-- Summer Rain -->
+                        <div class="slider-group">
+                            <div class="slider-meta">
+                                <span class="slider-name">Ambient Rainfall</span>
+                                <span id="val-rain" class="slider-val">9%</span>
+                            </div>
+                            <input type="range" id="slider-rain" min="0" max="0.5" step="0.01" value="0.09">
+                        </div>
+
+                        <!-- Space Reverb -->
+                        <div class="slider-group">
+                            <div class="slider-meta">
+                                <span class="slider-name">Convolver Space</span>
+                                <span id="val-space" class="slider-val">40%</span>
+                            </div>
+                            <input type="range" id="slider-space" min="0" max="1" step="0.01" value="0.40">
+                        </div>
+
+                        <!-- Master Volume -->
+                        <div class="slider-group">
+                            <div class="slider-meta">
+                                <span class="slider-name">Master Level</span>
+                                <span id="val-volume" class="slider-val">50%</span>
+                            </div>
+                            <input type="range" id="slider-volume" min="0" max="1" step="0.01" value="0.50">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Record Session Bar -->
+                <div class="record-bar">
+                    <button id="record-btn" class="liquid-btn-record">
+                        <span id="record-indicator" class="record-dot"></span>
+                        <span id="record-text">RECORD SESSION</span>
+                    </button>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <div class="footer-info">
+                <span>AETHER • Real-time Web Audio API & Liquid Glass Dynamics</span>
+            </div>
+            <div class="footer-links">
+                <span>Generated purely with code • No pre-recorded loops</span>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/audio-engine.js"></script>
+    <script src="js/visualizer.js"></script>
+    <script src="js/ui.js"></script>
+</body>
+</html>
